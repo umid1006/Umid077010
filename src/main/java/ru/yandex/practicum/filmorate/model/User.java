@@ -1,28 +1,48 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.experimental.FieldDefaults;
+import lombok.*;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE) // Add this line
-public class User {
-    int id;
+@Getter
+@Setter
+@RequiredArgsConstructor
+@ToString
+public class User extends AbstractEntity {
+    @NotBlank
+    @Email
+    private String email;
+    @NotBlank
+    @Pattern(regexp="\\S+")
+    private String login;
+    private String name;
+    @Past
+    private LocalDate birthday;
 
-    @NotBlank(message = "Email не может быть пустым")
-    @Email(message = "Email должен быть корректного формата")
-    String email;
+    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    private final Set<Long> friends = new HashSet<>();
 
-    @NotBlank(message = "Логин не может быть пустым")
-    @Pattern(regexp = "\\S+", message = "Логин не может содержать пробелы")
-    String login;
+    public void addFriend(Long id) {
+        friends.add(id);
+    }
 
-    String name;
+    public void removeFriend(Long id) {
+        friends.remove(id);
+    }
 
-    @NotNull(message = "Дата рождения не может быть null")
-    @Past(message = "Дата рождения не может быть в будущем")
-    LocalDate birthday;
+    public List<Long> getFiends() {
+        return new ArrayList<>(friends);
+    }
+
+    public boolean containsFriend(Long id){
+        return friends.contains(id);
+    }
 }

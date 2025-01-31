@@ -1,29 +1,46 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.experimental.FieldDefaults;
-import ru.yandex.practicum.filmorate.validation.FilmDataChecker;
+import lombok.*;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
-@FieldDefaults(level = AccessLevel.PRIVATE) // Add this line
-public class Film {
-    int id;
+@Getter
+@Setter
+@RequiredArgsConstructor
+@ToString
+public class Film extends AbstractEntity {
+    @NotBlank
+    private String name;
+    @NotBlank
+    @Size(max = 200)
+    private String description;
+    private LocalDate releaseDate;
+    @Min(1)
+    private int duration;
+    private Rating mpa;
+    private Set<Genre> genres;
 
-    @NotBlank(message = "Название фильма не может быть пустым")
-    String name;
+    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    private final Set<Long> likes = new HashSet<>();
 
-    @Size(min = 1, max = 200, message = "Максимальная длина описания — 200 символов")
-    String description;
+    public void addLike(Long userId) {
+        likes.add(userId);
+    }
 
-    @NotNull(message = "Дата релиза не может быть null")
-    @PastOrPresent(message = "Дата релиза не может быть в будущем") // Добавьте эту аннотацию
-    @FilmDataChecker
-    LocalDate releaseDate;
+    public void removeLike(Long userId) {
+        likes.remove(userId);
+    }
 
-    @Min(value = 1, message = "Продолжительность фильма должна быть положительным числом")
-    int duration;
+    public int getLikesCount() {
+        return likes.size();
+    }
+
+    public Set<Long> getLikes() {
+        return new HashSet<>(likes);
+    }
 }

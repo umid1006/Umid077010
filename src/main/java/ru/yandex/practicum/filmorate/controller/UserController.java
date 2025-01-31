@@ -1,49 +1,39 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 
-import javax.validation.Valid;
 import java.util.List;
 
+//Переписал, чтобы меньше кода была наследниках
 @RestController
 @RequestMapping("/users")
-public class UserController {
+public class UserController extends AbstractController<User, UserService> {
 
-    private final UserService userService;
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
-    public UserController(UserService userService) {
-        this.userService = userService;
+    @Autowired
+    public UserController(UserService service) {
+        super(service);
     }
 
-    @GetMapping
-    public List<User> findAll() {
-        return userService.getAllUsers();
+    @PutMapping("/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable("id") Long id1, @PathVariable("friendId") Long id2) {
+        service.addFriend(id1, id2);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User create(@Valid @RequestBody User user) {
-        return userService.createUser(user);
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public void removeFriend(@PathVariable("id") Long id1, @PathVariable("friendId") Long id2) {
+        service.removeFriend(id1, id2);
     }
 
-    @PutMapping
-    public User update(@Valid @RequestBody User user) {
-        try {
-            User updatedUser = userService.updateUser(user);
-            return ResponseEntity.ok(updatedUser).getBody();
-        } catch (UserNotFoundException | FilmNotFoundException e) {
-            // Log the exception and return a 404 Not Found response
-            log.warn("User not found: {}", e.getMessage());
-            return null; // Or throw the exception to be handled by a global exception handler
-        }
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable  Long id) {
+        return service.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable("id") Long id1, @PathVariable("otherId") long id2) {
+        return service.getCommonFriends(id1, id2);
     }
 }
