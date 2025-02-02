@@ -16,12 +16,16 @@ import java.util.Set;
 public class Film extends AbstractEntity {
     @NotBlank
     private String name;
+
     @NotBlank
     @Size(max = 200)
     private String description;
+
     private LocalDate releaseDate;
+
     @Min(1)
     private int duration;
+
     private Rating mpa;
     private Set<Genre> genres;
 
