@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.AbstractEntity;
 import ru.yandex.practicum.filmorate.service.CommonService;
 
@@ -33,6 +34,10 @@ public abstract class AbstractController <E extends AbstractEntity, S extends Co
 
     @PutMapping
     public E update(@Valid @RequestBody E data) {
+        E existingEntity = service.findById(data.getId());
+        if (existingEntity == null) {
+            throw new NotFoundException("Entity with id " + data.getId() + " not found");
+        }
         return service.update(data);
     }
 }
