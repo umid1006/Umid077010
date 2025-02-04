@@ -35,16 +35,22 @@ public class FilmService extends AbstractService<Film, FilmStorage> {
 
     @Override
     public Film create(Film film) {
+        validateReleaseDate(film.getReleaseDate());
+        validateMpa(film.getMpa());
         film = super.create(film);
         storage.createGenresByFilm(film);
+        loadData(film); // Load genres and likes after creating
         log.info("Добавлен фильма {}", film);
         return film;
     }
 
     @Override
     public Film update(Film film) {
+        validateReleaseDate(film.getReleaseDate());
+        validateMpa(film.getMpa());
         film = super.update(film);
         storage.updateGenresByFilm(film);
+        loadData(film); // Load genres and likes after updating
         log.info("Обновлён фильм {}", film);
         return film;
     }
@@ -85,7 +91,7 @@ public class FilmService extends AbstractService<Film, FilmStorage> {
 
     private void validateReleaseDate(LocalDate date) {
         if (date.isBefore(MIN_DATE)) {
-            log.warn(MSG_ERR_DATE + date);
+            log.warn(MSG_ERR_DATE + "{}", date);
             throw new InvalidFilmException(MSG_ERR_DATE);
         }
     }

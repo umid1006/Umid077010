@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -27,7 +28,7 @@ public class Film extends AbstractEntity {
     private int duration;
 
     private Rating mpa;
-    private Set<Genre> genres;
+    private List<Genre> genres;
 
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     private final Set<Long> likes = new HashSet<>();

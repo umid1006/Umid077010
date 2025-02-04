@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
@@ -39,9 +40,9 @@ public class FilmDbStorage implements FilmStorage {
                 "WHERE f.FILM_ID = ?";
         List<Film> result = jdbcTemplate.query(sql, this::mapToFilm, id);
         if (result.isEmpty()) {
-            return null;
+            throw new NotFoundException("Film not found with id: " + id);
         }
-        return result.get(0);
+        return result.getFirst();
     }
 
     private Film mapToFilm(ResultSet resultSet, int rowNum) throws SQLException {
@@ -115,7 +116,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public void createGenresByFilm(Film film) {
         String sql = "INSERT INTO FILMS_GENRES (FILM_ID, GENRE_ID) VALUES(?, ?)";
-        Set<Genre> genres = film.getGenres();
+        List<Genre> genres = film.getGenres();
         if (genres == null) {
             return;
         }
