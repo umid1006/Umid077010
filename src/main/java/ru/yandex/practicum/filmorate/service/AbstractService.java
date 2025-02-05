@@ -12,8 +12,8 @@ import java.util.List;
 @Slf4j
 public abstract class AbstractService<E extends AbstractEntity, T extends CommonStorage<E>>
         implements CommonService<E> {
-    private final static String MSG_ERR_ID = "Некорректный id ";
-    private final static String MSG_ERR_NOT_FOUND = "Не найдено по id ";
+    private static final String MSG_ERR_ID = "Некорректный id "; // Correct order: private static final
+    private static final String MSG_ERR_NOT_FOUND = "Не найдено по id "; // Correct order: private static final
 
     protected final T storage;
 
@@ -40,7 +40,7 @@ public abstract class AbstractService<E extends AbstractEntity, T extends Common
     }
 
     @Override
-    abstract public void validationBeforeCreate(E data);
+    public abstract void validationBeforeCreate(E data);
 
     @Override
     public void validationBeforeUpdate(E data) {
