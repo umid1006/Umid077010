@@ -70,4 +70,4 @@ public class ErrorHandler {
         errorMap.put("error", "Invalid data: " + ex.getMessage()); // Customize the message as needed
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMap); // Or HttpStatus.NOT_FOUND, depending on the context
     }
-    }
+}

@@ -33,8 +33,8 @@ public class FilmDbStorage implements FilmStorage {
     public Film findById(Long id) {
         String sql =
                 "SELECT f.FILM_ID, f.NAME, f.DESCRIPTION, f.RELEASE_DATE, f.DURATION, f.RATING_ID, r.NAME R_NAME " +
-                "FROM FILMS f JOIN RATINGS r ON f.RATING_ID = r.RATING_ID " +
-                "WHERE f.FILM_ID = ?";
+                        "FROM FILMS f JOIN RATINGS r ON f.RATING_ID = r.RATING_ID " +
+                        "WHERE f.FILM_ID = ?";
         List<Film> result = jdbcTemplate.query(sql, this::mapToFilm, id);
         if (result.isEmpty()) {
             throw new NotFoundException("Film not found with id: " + id);
@@ -57,7 +57,7 @@ public class FilmDbStorage implements FilmStorage {
     public List<Film> findAll() {
         String sql =
                 "SELECT f.FILM_ID, f.NAME, f.DESCRIPTION, f.RELEASE_DATE, f.DURATION, f.RATING_ID, r.NAME R_NAME " +
-                "FROM FILMS f JOIN RATINGS r ON f.RATING_ID = r.RATING_ID ORDER BY f.FILM_ID";
+                        "FROM FILMS f JOIN RATINGS r ON f.RATING_ID = r.RATING_ID ORDER BY f.FILM_ID";
         return jdbcTemplate.query(sql, this::mapToFilm);
     }
 
@@ -82,7 +82,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film update(Film film) {
         String sql =
                 "UPDATE FILMS SET NAME = ?, DESCRIPTION = ?, RELEASE_DATE = ?, DURATION = ?, RATING_ID = ? " +
-                "WHERE FILM_ID = ?";
+                        "WHERE FILM_ID = ?";
         jdbcTemplate.update(sql, film.getName(), film.getDescription(), film.getReleaseDate(), film.getDuration(),
                 film.getMpa().getId(), film.getId());
 
@@ -95,7 +95,7 @@ public class FilmDbStorage implements FilmStorage {
 
         String sql = "INSERT INTO FILMS_LIKES (FILM_ID, USER_ID) VALUES(?, ?)";
         Set<Long> likes = film.getLikes();
-        for (var like : likes ) {
+        for (var like : likes) {
             jdbcTemplate.update(sql, film.getId(), like);
         }
     }
@@ -126,7 +126,8 @@ public class FilmDbStorage implements FilmStorage {
         }
     }
 
-    @Override public void updateGenresByFilm(Film film) {
+    @Override
+    public void updateGenresByFilm(Film film) {
         String sql = "DELETE FROM FILMS_GENRES WHERE FILM_ID = ?";
         jdbcTemplate.update(sql, film.getId());
         createGenresByFilm(film);
