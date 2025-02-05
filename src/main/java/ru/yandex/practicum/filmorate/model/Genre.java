@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Genre extends AbstractEntity{
+public class Genre extends AbstractEntity {
     @Size(max = 30)
     private String name;
 

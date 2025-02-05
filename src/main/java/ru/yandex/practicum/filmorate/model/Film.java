@@ -30,7 +30,8 @@ public class Film extends AbstractEntity {
     private Rating mpa;
     private List<Genre> genres;
 
-    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private final Set<Long> likes = new HashSet<>();
 
     public void addLike(Long userId) {
