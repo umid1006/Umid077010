@@ -6,7 +6,7 @@ import java.util.List;
 
 //Чтобы не повторяться
 
-public interface CommonStorage <E extends AbstractEntity> {
+public interface CommonStorage<E extends AbstractEntity> {
     E findById(Long id);
 
     List<E> findAll();
