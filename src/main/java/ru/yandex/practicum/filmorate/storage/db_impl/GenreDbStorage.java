@@ -30,7 +30,7 @@ public class GenreDbStorage implements GenreStorage {
         if (result.isEmpty()) {
             return null;
         }
-        return result.getFirst();
+        return result.get(0);
     }
 
     private Genre mapToGenre(ResultSet resultSet, int rowNum) throws SQLException {
@@ -69,7 +69,7 @@ public class GenreDbStorage implements GenreStorage {
     @Override
     public List<Genre> getGenresByFilm(Film film) {
         String sql = "SELECT g.GENRE_ID, g.NAME FROM GENRES g NATURAL JOIN FILMS_GENRES fg WHERE fg.FILM_ID = ?";
-        return jdbcTemplate.query(sql, this::mapToGenre, film.getId()); // Directly return the List    }
+        return jdbcTemplate.query(sql, this::mapToGenre, film.getId()); // Directly return the List
+    }
 
-}
 }

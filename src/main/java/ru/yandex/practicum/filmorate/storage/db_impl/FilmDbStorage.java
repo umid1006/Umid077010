@@ -15,10 +15,7 @@ import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Primary
@@ -115,13 +112,17 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void createGenresByFilm(Film film) {
-        String sql = "INSERT INTO FILMS_GENRES (FILM_ID, GENRE_ID) VALUES(?, ?)";
+        String sql = "INSERT INTO FILMS_GENRES (FILM_ID, GENRE_ID) VALUES (?, ?)";
         List<Genre> genres = film.getGenres();
-        if (genres == null) {
+        if (genres == null || genres.isEmpty()) {
             return;
         }
-        for (var genre : genres ) {
-            jdbcTemplate.update(sql, film.getId(), genre.getId());
+        Set<Long> genreIds = new HashSet<>();
+        for (Genre genre : genres) {
+            // Only add to the set if the genre id is not already present
+            if (genreIds.add(genre.getId())) {
+                jdbcTemplate.update(sql, film.getId(), genre.getId());
+            }
         }
     }
 
