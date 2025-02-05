@@ -1,28 +1,18 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true) // Important for proper comparison with AbstractEntity
 public class Genre extends AbstractEntity {
+
+    @NotBlank // Use @NotBlank, not just @Size
     @Size(max = 30)
     private String name;
-
-    public Genre(Long id, String name) {
-        super(id);
-        this.name = name;
-    }
-
-    public Genre(Long id) {
-        super(id);
-        this.name = "";
-    }
-
-    public Genre() {
-        this.name = "";
-    }
 }

@@ -1,19 +1,13 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode
+@ToString
+@EqualsAndHashCode // Add EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class AbstractEntity {
-    private Long id;
-
-    public AbstractEntity(Long id) {
-        this.id = id;
-    }
-
-    public AbstractEntity() {
-    }
+    protected Long id;
 }

@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
@@ -114,7 +115,7 @@ public class FilmDbStorage implements FilmStorage {
     public void createGenresByFilm(Film film) {
         String sql = "INSERT INTO FILMS_GENRES (FILM_ID, GENRE_ID) VALUES (?, ?)";
         List<Genre> genres = film.getGenres();
-        if (genres == null || genres.isEmpty()) {
+        if (CollectionUtils.isEmpty(genres)) {
             return;
         }
         Set<Long> genreIds = new HashSet<>();
